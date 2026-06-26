@@ -79,5 +79,28 @@ public sealed class PartidaPresupuesto : AuditableEntity
         return true;
     }
 
+    /// <summary>Crea una copia independiente (nuevos identificadores) en el capítulo indicado, incluida su medición.</summary>
+    public PartidaPresupuesto Duplicar(Guid capituloDestinoId)
+    {
+        var copia = new PartidaPresupuesto(Guid.NewGuid(), capituloDestinoId, Codigo, Resumen, Precio, PartidaOrigenId);
+        if (PrecioBloqueado)
+            copia.BloquearPrecio();
+
+        foreach (var linea in Medicion.Lineas)
+        {
+            var nueva = copia.Medicion.AnadirLinea();
+            nueva.Comentario = linea.Comentario;
+            nueva.EsComentario = linea.EsComentario;
+            nueva.Uds = linea.Uds;
+            nueva.Largo = linea.Largo;
+            nueva.Ancho = linea.Ancho;
+            nueva.Alto = linea.Alto;
+            nueva.Coeficiente = linea.Coeficiente;
+            nueva.Formula = linea.Formula;
+        }
+
+        return copia;
+    }
+
     private void Tocar() => ActualizadoEn = DateTimeOffset.UtcNow;
 }

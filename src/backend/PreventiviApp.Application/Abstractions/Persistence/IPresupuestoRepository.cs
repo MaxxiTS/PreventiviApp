@@ -17,6 +17,9 @@ public interface IPresupuestoRepository
     /// <summary>Partida del presupuesto en seguimiento (tracked) para editarla y persistir cambios.</summary>
     Task<PartidaPresupuesto?> ObtenerPartidaTrackedAsync(Guid partidaId, CancellationToken cancellationToken = default);
 
+    /// <summary>Partida con su medición y líneas (solo lectura), para duplicarla.</summary>
+    Task<PartidaPresupuesto?> ObtenerPartidaConMedicionAsync(Guid partidaId, CancellationToken cancellationToken = default);
+
     /// <summary>Todas las partidas de un presupuesto en seguimiento (tracked), para actualización masiva.</summary>
     Task<IReadOnlyList<PartidaPresupuesto>> ListarPartidasTrackedAsync(Guid presupuestoId, CancellationToken cancellationToken = default);
 

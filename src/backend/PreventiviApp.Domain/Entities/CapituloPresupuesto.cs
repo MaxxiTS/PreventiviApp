@@ -65,4 +65,18 @@ public sealed class CapituloPresupuesto : AuditableEntity
         SubtotalCache = subtotal;
         Dirty = false;
     }
+
+    /// <summary>Copia profunda del capítulo (nuevos identificadores) con sus partidas y subcapítulos.</summary>
+    public CapituloPresupuesto Duplicar(Guid? nuevoPadreId)
+    {
+        var copia = new CapituloPresupuesto(Guid.NewGuid(), PresupuestoId, Codigo, Titulo, Orden, nuevoPadreId);
+
+        foreach (var partida in _partidas)
+            copia.AnadirPartida(partida.Duplicar(copia.Id));
+
+        foreach (var subcapitulo in _subcapitulos)
+            copia.AnadirSubcapitulo(subcapitulo.Duplicar(copia.Id));
+
+        return copia;
+    }
 }

@@ -62,6 +62,26 @@ public sealed class PresupuestosController(ISender sender) : ApiControllerBase
     public async Task<IActionResult> ActualizarPrecios(Guid id, [FromBody] ActualizarPreciosRequest cuerpo, CancellationToken ct)
         => Responder(await sender.Send(new ActualizarPreciosDesdePreciosarioCommand(id, cuerpo.PreciosarioId), ct));
 
+    /// <summary>Duplica una partida (con su medición) dentro de su mismo capítulo.</summary>
+    [HttpPost("partidas/{partidaId:guid}/duplicar")]
+    public async Task<IActionResult> DuplicarPartida(Guid partidaId, CancellationToken ct)
+        => Responder(await sender.Send(new DuplicarPartidaCommand(partidaId), ct));
+
+    /// <summary>Duplica un capítulo completo (copia profunda) como hermano.</summary>
+    [HttpPost("capitulos/{capituloId:guid}/duplicar")]
+    public async Task<IActionResult> DuplicarCapitulo(Guid capituloId, CancellationToken ct)
+        => Responder(await sender.Send(new DuplicarCapituloCommand(capituloId), ct));
+
+    /// <summary>Crea una nueva versión (snapshot) del presupuesto.</summary>
+    [HttpPost("{id:guid}/versiones")]
+    public async Task<IActionResult> CrearNuevaVersion(Guid id, CancellationToken ct)
+        => Responder(await sender.Send(new CrearNuevaVersionPresupuestoCommand(id), ct));
+
+    /// <summary>Compara dos versiones de presupuesto por código de partida.</summary>
+    [HttpGet("comparar")]
+    public async Task<IActionResult> Comparar([FromQuery] Guid a, [FromQuery] Guid b, CancellationToken ct)
+        => Responder(await sender.Send(new CompararVersionesQuery(a, b), ct));
+
     public sealed record AnadirCapituloRequest(string Codigo, string Titulo, Guid? PadreId = null, int Orden = 1);
 
     public sealed record EditarPrecioRequest(decimal NuevoPrecio);

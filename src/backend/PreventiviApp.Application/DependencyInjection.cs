@@ -23,6 +23,7 @@ public static class DependencyInjection
         services.AddSingleton<CalculadoraPresupuesto>();
         services.AddSingleton<ActualizadorPreciosPresupuesto>();
         services.AddSingleton<ConciliadorPreciosario>();
+        services.AddSingleton<ComparadorPresupuestos>();
 
         return services;
     }

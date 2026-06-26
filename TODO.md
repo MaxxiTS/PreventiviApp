@@ -59,6 +59,7 @@ Leyenda: `[x]` completado · `[~]` parcial / en curso · `[ ]` pendiente
 - [x] Test del handler `CalcularPresupuesto` (DTO→dominio→motor)
 - [x] Tests de gestión de precios (bloqueo + actualización masiva desde preciosario)
 - [x] Tests de conciliación de reimportación DCF (alta/actualizar/respetar/obsoleta)
+- [x] Tests de duplicado (copia profunda), nueva versión y comparación (diff + delta)
 - [ ] Ejecutar la suite (`dotnet test`) y confirmar verde — **pendiente (sin SDK aquí)**
 - [ ] Tests de integración de la API (WebApplicationFactory / Testcontainers)
 - [ ] Tests del importador DCF (archivos de muestra y casos de error)
@@ -102,12 +103,16 @@ Leyenda: `[x]` completado · `[~]` parcial / en curso · `[ ]` pendiente
 ---
 
 ## 4. Funcionalidad de presupuestos (avanzada)
-- [~] Editar / duplicar / copiar partidas (editar **precio** hecho; duplicar/copiar pendiente)
+- [x] Editar precio de partida
+- [x] Duplicar partidas y capítulos (copia profunda)
+- [ ] Copiar partidas/capítulos **entre** presupuestos distintos
 - [x] Bloquear / desbloquear precios (doc 12 §5.3)
 - [x] Actualizar precios de un presupuesto desde un preciosario, respetando bloqueados (doc 12 §5.2)
+- [x] Versionado de presupuestos (nueva versión / snapshot, doc 12 §7.1)
+- [x] Comparar versiones de presupuestos (diff por código, doc 12 §7.2)
 - [~] *Actualizar desde nuevo DCF*: reimportación del catálogo (doc 12 §6) — precios y
   obsolescencia hechos y testeados; alta automática de partidas/capítulos nuevos pendiente
-- [ ] Comparar versiones de DCF y de presupuestos (diff)
+- [ ] Comparar versiones de **DCF** (diff de catálogo)
 - [ ] Versionado de presupuestos (snapshots)
 - [ ] Undo/redo y autoguardado
 - [ ] Plantillas, favoritos, etiquetas, comentarios, adjuntos

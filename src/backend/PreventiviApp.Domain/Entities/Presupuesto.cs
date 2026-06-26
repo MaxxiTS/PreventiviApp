@@ -47,4 +47,24 @@ public sealed class Presupuesto : AuditableEntity
     public IReadOnlyList<CapituloPresupuesto> CapitulosRaiz => _capitulosRaiz;
 
     public void AnadirCapituloRaiz(CapituloPresupuesto capitulo) => _capitulosRaiz.Add(capitulo);
+
+    /// <summary>
+    /// Crea una nueva versión (snapshot) del presupuesto: copia profunda del árbol con
+    /// nuevos identificadores y <see cref="NumeroVersion"/> incrementado (doc 12 §7).
+    /// </summary>
+    public Presupuesto CrearNuevaVersion()
+    {
+        var ivaCopia = new Iva(Guid.NewGuid(), Iva.Nombre, Iva.Porcentaje);
+        var copia = new Presupuesto(Guid.NewGuid(), ProyectoId, Nombre, ivaCopia, NumeroVersion + 1)
+        {
+            CostesIndirectosPct = CostesIndirectosPct,
+            BajaPct = BajaPct,
+            DescuentosImporte = DescuentosImporte,
+        };
+
+        foreach (var capitulo in _capitulosRaiz)
+            copia.AnadirCapituloRaiz(capitulo.Duplicar(nuevoPadreId: null));
+
+        return copia;
+    }
 }

@@ -24,6 +24,11 @@ internal sealed class PresupuestoRepository(AppDbContext db) : IPresupuestoRepos
     public async Task<PartidaPresupuesto?> ObtenerPartidaTrackedAsync(Guid partidaId, CancellationToken cancellationToken = default)
         => await db.PartidasPresupuesto.FirstOrDefaultAsync(p => p.Id == partidaId, cancellationToken);
 
+    public async Task<PartidaPresupuesto?> ObtenerPartidaConMedicionAsync(Guid partidaId, CancellationToken cancellationToken = default)
+        => await db.PartidasPresupuesto.AsNoTracking()
+            .Include(p => p.Medicion).ThenInclude(m => m.Lineas)
+            .FirstOrDefaultAsync(p => p.Id == partidaId, cancellationToken);
+
     public async Task<IReadOnlyList<PartidaPresupuesto>> ListarPartidasTrackedAsync(Guid presupuestoId, CancellationToken cancellationToken = default)
     {
         var capituloIds = await db.CapitulosPresupuesto
