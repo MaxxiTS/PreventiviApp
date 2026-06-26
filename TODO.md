@@ -4,10 +4,11 @@ Checklist global del proyecto. Estado a **2026-06-26**.
 
 Leyenda: `[x]` completado · `[~]` parcial / en curso · `[ ]` pendiente
 
-> ⚠️ **Nota de verificación**: todo el backend está escrito para .NET 9 y revisado por
-> inspección, pero **no se ha compilado ni ejecutado** en este entorno (el SDK de .NET y su
-> descarga están bloqueados por la política de red del entorno remoto). Pendiente validar con
-> `dotnet build` / `dotnet test` en local.
+> ⚠️ **Nota de verificación**: todo el código (backend .NET 9 y frontend Flutter) está
+> escrito y revisado por inspección, pero **no se ha compilado ni ejecutado** en este entorno
+> (no hay SDK de .NET ni de Flutter, y su descarga está bloqueada por la política de red del
+> entorno remoto). Pendiente validar en local con `dotnet build`/`dotnet test` y
+> `flutter pub get`/`flutter run`.
 
 ---
 
@@ -113,7 +114,6 @@ Leyenda: `[x]` completado · `[~]` parcial / en curso · `[ ]` pendiente
 - [~] *Actualizar desde nuevo DCF*: reimportación del catálogo (doc 12 §6) — precios y
   obsolescencia hechos y testeados; alta automática de partidas/capítulos nuevos pendiente
 - [ ] Comparar versiones de **DCF** (diff de catálogo)
-- [ ] Versionado de presupuestos (snapshots)
 - [ ] Undo/redo y autoguardado
 - [ ] Plantillas, favoritos, etiquetas, comentarios, adjuntos
 - [ ] Buscador inteligente (FTS5 local / tsvector + pg_trgm servidor)
@@ -167,6 +167,9 @@ Leyenda: `[x]` completado · `[~]` parcial / en curso · `[ ]` pendiente
 ---
 
 ## Próximo paso recomendado
-1. Validar el backend en local: `dotnet build` / `dotnet test` / `dotnet run` y corregir errores de compilación.
+1. **Validar la compilación en local** (backend `dotnet build`/`dotnet test`/`dotnet run`;
+   frontend `flutter pub get`/`flutter run`) y corregir errores.
 2. Generar las **migraciones EF Core** y añadir **tests de integración** de la API.
-3. Arrancar el **frontend Flutter** (sección 5).
+3. Completar el **editor de presupuesto en el frontend** (alta/edición de partidas y
+   mediciones; gestión de precios; duplicar/versionar/comparar) e **importar DCF desde la UI**.
+4. Sincronización cloud + seguridad/RBAC (v1.0).
