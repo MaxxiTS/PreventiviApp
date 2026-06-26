@@ -19,6 +19,18 @@ public sealed class PreciosariosController(ISender sender) : ApiControllerBase
         return Responder(resultado);
     }
 
+    /// <summary>Reimporta un DCF sobre un preciosario existente (actualiza precios, respeta bloqueados, marca obsoletas).</summary>
+    [HttpPost("{id:guid}/reimportar")]
+    public async Task<IActionResult> Reimportar(Guid id, IFormFile archivo, CancellationToken ct)
+    {
+        if (archivo is null || archivo.Length == 0)
+            return BadRequest("Debe adjuntar un archivo no vacío.");
+
+        await using var stream = archivo.OpenReadStream();
+        var resultado = await sender.Send(new ReimportarDcfCommand(id, stream, archivo.FileName), ct);
+        return Responder(resultado);
+    }
+
     [HttpGet]
     public async Task<IActionResult> Listar(CancellationToken ct)
         => Ok(await sender.Send(new ListarPreciosariosQuery(), ct));

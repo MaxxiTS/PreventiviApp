@@ -58,6 +58,7 @@ Leyenda: `[x]` completado · `[~]` parcial / en curso · `[ ]` pendiente
 - [x] Tests unitarios del motor de cálculo (fórmulas, mediciones, presupuesto) validados contra el doc 12
 - [x] Test del handler `CalcularPresupuesto` (DTO→dominio→motor)
 - [x] Tests de gestión de precios (bloqueo + actualización masiva desde preciosario)
+- [x] Tests de conciliación de reimportación DCF (alta/actualizar/respetar/obsoleta)
 - [ ] Ejecutar la suite (`dotnet test`) y confirmar verde — **pendiente (sin SDK aquí)**
 - [ ] Tests de integración de la API (WebApplicationFactory / Testcontainers)
 - [ ] Tests del importador DCF (archivos de muestra y casos de error)
@@ -83,7 +84,7 @@ Leyenda: `[x]` completado · `[~]` parcial / en curso · `[ ]` pendiente
 - [x] `DcfImporter` (parser de texto, streaming, tolerante, hash, cancelación)
 - [x] Archivo de ejemplo `tools/dcf-importer/ejemplo.dcf`
 - [ ] Soporte de formato real DCF binario / BC3 (FIEBDC-3) vía Strategy
-- [ ] Reimportación idempotente respetando precios bloqueados
+- [~] Reimportación respetando precios bloqueados (conciliación de precios/obsolescencia hecha; alta de nuevos pendiente)
 
 ### 3.6. Documentos
 - [x] `IGeneradorPresupuestoPdf` + `GeneradorPresupuestoPdf` (QuestPDF)
@@ -104,7 +105,8 @@ Leyenda: `[x]` completado · `[~]` parcial / en curso · `[ ]` pendiente
 - [~] Editar / duplicar / copiar partidas (editar **precio** hecho; duplicar/copiar pendiente)
 - [x] Bloquear / desbloquear precios (doc 12 §5.3)
 - [x] Actualizar precios de un presupuesto desde un preciosario, respetando bloqueados (doc 12 §5.2)
-- [ ] *Actualizar desde nuevo DCF*: reimportación idempotente del catálogo (doc 12 §6)
+- [~] *Actualizar desde nuevo DCF*: reimportación del catálogo (doc 12 §6) — precios y
+  obsolescencia hechos y testeados; alta automática de partidas/capítulos nuevos pendiente
 - [ ] Comparar versiones de DCF y de presupuestos (diff)
 - [ ] Versionado de presupuestos (snapshots)
 - [ ] Undo/redo y autoguardado

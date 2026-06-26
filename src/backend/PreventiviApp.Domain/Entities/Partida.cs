@@ -32,4 +32,19 @@ public sealed class Partida : AuditableEntity
 
     /// <summary>Marca de partida sin correspondencia en la última versión del DCF.</summary>
     public bool Obsoleta { get; set; }
+
+    /// <summary>Actualiza el precio desde una reimportación de DCF y la reactiva si estaba obsoleta.</summary>
+    public void ActualizarPrecio(decimal precio)
+    {
+        Precio = precio;
+        Obsoleta = false;
+        ActualizadoEn = DateTimeOffset.UtcNow;
+    }
+
+    /// <summary>Marca la partida como obsoleta (ausente en el DCF reimportado); no se borra.</summary>
+    public void MarcarObsoleta()
+    {
+        Obsoleta = true;
+        ActualizadoEn = DateTimeOffset.UtcNow;
+    }
 }

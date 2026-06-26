@@ -1,5 +1,6 @@
 using PreventiviApp.Application.Abstractions.Importacion;
 using PreventiviApp.Domain.Entities;
+using PreventiviApp.Domain.Services;
 
 namespace PreventiviApp.Application.Abstractions.Persistence;
 
@@ -33,4 +34,10 @@ public interface IPreciosarioRepository
 
     /// <summary>Precio vigente de cada partida del preciosario, indexado por código (para «Actualizar precios»).</summary>
     Task<IReadOnlyDictionary<string, decimal>> ObtenerPreciosPorCodigoAsync(Guid preciosarioId, CancellationToken ct = default);
+
+    /// <summary>Estado (código, precio, bloqueo) de las partidas del catálogo, para la conciliación al reimportar.</summary>
+    Task<IReadOnlyList<EstadoPartidaCatalogo>> ObtenerEstadoPartidasCatalogoAsync(Guid preciosarioId, CancellationToken ct = default);
+
+    /// <summary>Partidas del preciosario en seguimiento (tracked), para aplicar la reimportación.</summary>
+    Task<IReadOnlyList<Partida>> ObtenerPartidasTrackedAsync(Guid preciosarioId, CancellationToken ct = default);
 }
