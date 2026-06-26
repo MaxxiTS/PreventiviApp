@@ -40,11 +40,41 @@ Validan el motor **contra los ejemplos numéricos documentados** en
 > dotnet test
 > ```
 
+### Aplicación, infraestructura y API (vertical slice)
+- **`PreventiviApp.Application`** (CQRS con MediatR + FluentValidation + Result Pattern):
+  - Abstracciones de persistencia (`IUnitOfWork`, `IClienteRepository`, `IProyectoRepository`).
+  - Casos de uso: Clientes (`CrearCliente`, `ListarClientes`), Proyectos (`CrearProyecto`,
+    `ListarProyectos`, `ObtenerProyecto`, `CambiarEstadoProyecto`) y `CalcularPresupuesto`
+    (sin estado, reutiliza el motor de dominio).
+  - `ValidationBehavior` (pipeline) y `AddApplication` (DI).
+- **`PreventiviApp.Infrastructure`** (EF Core + SQLite):
+  - `AppDbContext` (implementa `IUnitOfWork`), configuraciones de `Cliente`/`Proyecto`,
+    repositorios, `AppDbContextFactory` (migraciones) y `AddInfrastructure`.
+- **`PreventiviApp.Api`** (ASP.NET Core):
+  - `ClientesController`, `ProyectosController`, `PresupuestosController`.
+  - `ApiControllerBase` (traduce `Result` → 200/404/409/400 ProblemDetails) y
+    `ValidationExceptionHandler`. Wiring en `Program.cs` (Swagger, EnsureCreated en dev).
+
+#### Endpoints
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `POST` | `/api/clientes` | Crear cliente |
+| `GET` | `/api/clientes` | Listar clientes |
+| `POST` | `/api/proyectos` | Crear proyecto |
+| `GET` | `/api/proyectos` | Listar proyectos |
+| `GET` | `/api/proyectos/{id}` | Obtener proyecto |
+| `PATCH` | `/api/proyectos/{id}/estado` | Cambiar estado (transición validada) |
+| `POST` | `/api/presupuestos/calcular` | Calcular totales de un presupuesto (sin persistir) |
+| `GET` | `/health` | Health check |
+
+Ejecutar la API: `dotnet run --project PreventiviApp.Api` (crea `preventivi.db` en dev y
+expone Swagger en `/swagger`).
+
 ## Pendiente (siguientes incrementos del MVP)
-- `PreventiviApp.Application`: casos de uso (MediatR/CQRS), DTOs, validadores.
-- `PreventiviApp.Infrastructure`: persistencia EF Core + SQLite, repositorios, importador DCF.
-- `PreventiviApp.Api`: endpoints REST (ver [`../../docs/09-api-rest.md`](../../docs/09-api-rest.md)).
-- Generación de PDF (QuestPDF) y navegación en el frontend Flutter.
+- Persistencia completa del **árbol de presupuesto** (Presupuesto/Capítulo/Partida/Medición)
+  con EF Core (mapeo de colecciones, owned types y árbol jerárquico).
+- **Importador DCF** (ver [`../../docs/11-importador-dcf.md`](../../docs/11-importador-dcf.md)).
+- Generación de **PDF** (QuestPDF) y navegación en el **frontend Flutter**.
 
 ## Estructura
 ```

@@ -11,10 +11,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- CQRS, validación y mapeo -->
+    <InternalsVisibleTo Include="PreventiviApp.Tests.Unit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- CQRS, validación y DI -->
     <PackageReference Include="MediatR" Version="12.*" />
     <PackageReference Include="FluentValidation" Version="11.*" />
-    <PackageReference Include="Mapster" Version="7.*" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.*" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.*" />
   </ItemGroup>
 
 </Project>
