@@ -1,0 +1,13 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Preventivi App — Backend (.NET 9, Clean Architecture)
+#
+# Proyectos (la regla de dependencia apunta hacia Domain):
+#   PreventiviApp.Domain         -> sin dependencias
+#   PreventiviApp.Application    -> Domain
+#   PreventiviApp.Infrastructure -> Application
+#   PreventiviApp.Api            -> Infrastructure
+#   PreventiviApp.Tests.Unit         -> Application
+#   PreventiviApp.Tests.Integration  -> Api
+#
+# Generar con: dotnet sln add ./**/**.csproj
+# Este archivo se materializará al inicializar la solución en la fase de desarrollo.

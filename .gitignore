@@ -1,0 +1,29 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+# Flutter / Dart
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+*.iml
+.idea/
+# Node
+node_modules/
+dist/
+# Bases de datos locales
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+# Entorno
+.env
+.env.local
+*.log
+# SO
+.DS_Store
+Thumbs.db

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PreventiviApp.Domain\PreventiviApp.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- CQRS, validación y mapeo -->
+    <PackageReference Include="MediatR" Version="12.*" />
+    <PackageReference Include="FluentValidation" Version="11.*" />
+    <PackageReference Include="Mapster" Version="7.*" />
+  </ItemGroup>
+
+</Project>

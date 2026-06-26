@@ -1,0 +1,44 @@
+name: CI
+
+# Pipeline de integración continua (esqueleto). Ver docs/16-plan-pruebas.md y
+# docs/17-despliegue.md. Se activará cuando exista código compilable.
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  backend:
+    name: Backend (.NET 9)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+      - name: Restore
+        run: dotnet restore src/backend/PreventiviApp.sln
+      - name: Build
+        run: dotnet build src/backend/PreventiviApp.sln --no-restore -c Release
+      - name: Test
+        run: dotnet test src/backend/PreventiviApp.sln --no-build -c Release
+
+  frontend:
+    name: Frontend (Flutter)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Pub get
+        working-directory: src/frontend
+        run: flutter pub get
+      - name: Analyze
+        working-directory: src/frontend
+        run: flutter analyze
+      - name: Test
+        working-directory: src/frontend
+        run: flutter test
