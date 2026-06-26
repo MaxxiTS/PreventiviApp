@@ -47,7 +47,28 @@ public sealed class PresupuestosController(ISender sender) : ApiControllerBase
     public async Task<IActionResult> Calcular(CalcularPresupuestoCommand comando, CancellationToken ct)
         => Responder(await sender.Send(comando, ct));
 
+    /// <summary>Edita manualmente el precio de una partida (permitido aunque esté bloqueada).</summary>
+    [HttpPatch("partidas/{partidaId:guid}/precio")]
+    public async Task<IActionResult> EditarPrecio(Guid partidaId, [FromBody] EditarPrecioRequest cuerpo, CancellationToken ct)
+        => Responder(await sender.Send(new EditarPrecioPartidaCommand(partidaId, cuerpo.NuevoPrecio), ct));
+
+    /// <summary>Bloquea o desbloquea el precio de una partida.</summary>
+    [HttpPatch("partidas/{partidaId:guid}/bloqueo")]
+    public async Task<IActionResult> BloquearPrecio(Guid partidaId, [FromBody] BloquearPrecioRequest cuerpo, CancellationToken ct)
+        => Responder(await sender.Send(new BloquearPrecioPartidaCommand(partidaId, cuerpo.Bloqueado), ct));
+
+    /// <summary>Actualiza los precios del presupuesto desde un preciosario, respetando los bloqueados.</summary>
+    [HttpPost("{id:guid}/actualizar-precios")]
+    public async Task<IActionResult> ActualizarPrecios(Guid id, [FromBody] ActualizarPreciosRequest cuerpo, CancellationToken ct)
+        => Responder(await sender.Send(new ActualizarPreciosDesdePreciosarioCommand(id, cuerpo.PreciosarioId), ct));
+
     public sealed record AnadirCapituloRequest(string Codigo, string Titulo, Guid? PadreId = null, int Orden = 1);
+
+    public sealed record EditarPrecioRequest(decimal NuevoPrecio);
+
+    public sealed record BloquearPrecioRequest(bool Bloqueado);
+
+    public sealed record ActualizarPreciosRequest(Guid PreciosarioId);
 
     public sealed record AnadirPartidaRequest(
         string Codigo,

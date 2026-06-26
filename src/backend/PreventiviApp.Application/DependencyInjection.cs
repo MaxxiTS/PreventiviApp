@@ -21,6 +21,7 @@ public static class DependencyInjection
         services.AddSingleton<IEvaluadorFormula, EvaluadorFormula>();
         services.AddSingleton<EvaluadorMedicion>();
         services.AddSingleton<CalculadoraPresupuesto>();
+        services.AddSingleton<ActualizadorPreciosPresupuesto>();
 
         return services;
     }

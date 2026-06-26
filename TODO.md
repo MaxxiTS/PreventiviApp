@@ -57,6 +57,7 @@ Leyenda: `[x]` completado · `[~]` parcial / en curso · `[ ]` pendiente
 ### 3.2. Tests
 - [x] Tests unitarios del motor de cálculo (fórmulas, mediciones, presupuesto) validados contra el doc 12
 - [x] Test del handler `CalcularPresupuesto` (DTO→dominio→motor)
+- [x] Tests de gestión de precios (bloqueo + actualización masiva desde preciosario)
 - [ ] Ejecutar la suite (`dotnet test`) y confirmar verde — **pendiente (sin SDK aquí)**
 - [ ] Tests de integración de la API (WebApplicationFactory / Testcontainers)
 - [ ] Tests del importador DCF (archivos de muestra y casos de error)
@@ -99,9 +100,11 @@ Leyenda: `[x]` completado · `[~]` parcial / en curso · `[ ]` pendiente
 
 ---
 
-## 4. Funcionalidad de presupuestos (avanzada — pendiente)
-- [ ] Editar / duplicar / copiar partidas
-- [ ] Bloquear precios y *Actualizar precios desde nuevo DCF*
+## 4. Funcionalidad de presupuestos (avanzada)
+- [~] Editar / duplicar / copiar partidas (editar **precio** hecho; duplicar/copiar pendiente)
+- [x] Bloquear / desbloquear precios (doc 12 §5.3)
+- [x] Actualizar precios de un presupuesto desde un preciosario, respetando bloqueados (doc 12 §5.2)
+- [ ] *Actualizar desde nuevo DCF*: reimportación idempotente del catálogo (doc 12 §6)
 - [ ] Comparar versiones de DCF y de presupuestos (diff)
 - [ ] Versionado de presupuestos (snapshots)
 - [ ] Undo/redo y autoguardado

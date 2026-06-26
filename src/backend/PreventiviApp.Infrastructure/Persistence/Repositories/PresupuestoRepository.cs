@@ -21,6 +21,21 @@ internal sealed class PresupuestoRepository(AppDbContext db) : IPresupuestoRepos
     public async Task<CapituloPresupuesto?> ObtenerCapituloAsync(Guid capituloId, CancellationToken cancellationToken = default)
         => await db.CapitulosPresupuesto.FirstOrDefaultAsync(c => c.Id == capituloId, cancellationToken);
 
+    public async Task<PartidaPresupuesto?> ObtenerPartidaTrackedAsync(Guid partidaId, CancellationToken cancellationToken = default)
+        => await db.PartidasPresupuesto.FirstOrDefaultAsync(p => p.Id == partidaId, cancellationToken);
+
+    public async Task<IReadOnlyList<PartidaPresupuesto>> ListarPartidasTrackedAsync(Guid presupuestoId, CancellationToken cancellationToken = default)
+    {
+        var capituloIds = await db.CapitulosPresupuesto
+            .Where(c => c.PresupuestoId == presupuestoId)
+            .Select(c => c.Id)
+            .ToListAsync(cancellationToken);
+
+        return await db.PartidasPresupuesto
+            .Where(p => capituloIds.Contains(p.CapituloPresupuestoId))
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<Presupuesto?> ObtenerArbolAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var presupuesto = await db.Presupuestos.AsNoTracking()

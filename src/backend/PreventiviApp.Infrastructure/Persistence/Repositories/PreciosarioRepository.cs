@@ -42,4 +42,24 @@ internal sealed class PreciosarioRepository(AppDbContext db) : IPreciosarioRepos
 
     public async Task<IReadOnlyList<Descompuesto>> ListarDescompuestoAsync(Guid partidaId, CancellationToken ct = default)
         => await db.Descompuestos.AsNoTracking().Where(d => d.PartidaId == partidaId).ToListAsync(ct);
+
+    public async Task<IReadOnlyDictionary<string, decimal>> ObtenerPreciosPorCodigoAsync(Guid preciosarioId, CancellationToken ct = default)
+    {
+        var capituloIds = await db.Capitulos
+            .Where(c => c.PreciosarioId == preciosarioId)
+            .Select(c => c.Id)
+            .ToListAsync(ct);
+
+        var partidas = await db.Partidas.AsNoTracking()
+            .Where(p => capituloIds.Contains(p.CapituloId))
+            .Select(p => new { p.Codigo, p.Precio })
+            .ToListAsync(ct);
+
+        var precios = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
+        foreach (var p in partidas)
+            precios[p.Codigo] = p.Precio;
+
+        return precios;
+    }
 }
+

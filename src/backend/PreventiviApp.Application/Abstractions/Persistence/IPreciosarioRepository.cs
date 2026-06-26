@@ -30,4 +30,7 @@ public interface IPreciosarioRepository
 
     /// <summary>Líneas de descompuesto (análisis de precios) de una partida.</summary>
     Task<IReadOnlyList<Descompuesto>> ListarDescompuestoAsync(Guid partidaId, CancellationToken ct = default);
+
+    /// <summary>Precio vigente de cada partida del preciosario, indexado por código (para «Actualizar precios»).</summary>
+    Task<IReadOnlyDictionary<string, decimal>> ObtenerPreciosPorCodigoAsync(Guid preciosarioId, CancellationToken ct = default);
 }
