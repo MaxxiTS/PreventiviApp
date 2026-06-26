@@ -120,18 +120,23 @@ Leyenda: `[x]` completado · `[~]` parcial / en curso · `[ ]` pendiente
 
 ---
 
-## 5. Frontend (Flutter — pendiente)
-- [ ] Esqueleto feature-first + Riverpod + go_router + tema dark/light
+## 5. Frontend (Flutter — scaffold inicial hecho)
+- [x] Esqueleto feature-first + Riverpod + go_router + tema dark/light (Material 3)
+- [x] Shell con NavigationRail (Proyectos / Preciosarios) + home
+- [x] Cliente HTTP (Dio) + manejo de carga/error con `AsyncValue`
+- [x] Lista de proyectos + crear (POST) + abrir detalle
+- [x] Navegación de preciosarios: capítulos → partidas → análisis de precios
+- [x] Vista de presupuesto: resumen económico + árbol de capítulos/partidas
 - [ ] BD local (Drift/SQLite) y capa de datos offline-first
-- [ ] Lista de proyectos / abrir proyecto
-- [ ] Importar DCF (con progreso/cancelación)
-- [ ] Navegación de capítulos/partidas (árbol + virtual scrolling)
-- [ ] Análisis de precios (inspector lateral)
-- [ ] Editor de presupuesto + mediciones (tabla + fórmulas)
-- [ ] Totales y resumen económico
+- [ ] Importar DCF desde la UI (con progreso/cancelación)
+- [ ] Editor de presupuesto + mediciones (alta/edición de partidas y líneas, fórmulas)
+- [ ] Gestión de precios en UI (editar/bloquear/actualizar) y duplicar/versionar/comparar
+- [ ] Virtual scrolling para preciosarios grandes
 - [ ] Previsualización / descarga de PDF
-- [ ] Cliente HTTP de la API + manejo de errores
 - [ ] Empaquetado Desktop (Win/macOS/Linux), Web y Mobile
+
+> ⚠️ El frontend tampoco se ha compilado aquí (sin Flutter SDK). Validar con
+> `cd src/frontend && flutter pub get && flutter run -d chrome` (o `-d windows`).
 
 ---
 

@@ -4,19 +4,23 @@ publish_to: "none"
 version: 0.1.0+1
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
+  # Dart 3.6+ (Flutter 3.27+) por uso de Color.withValues y CardThemeData.
+  sdk: ">=3.6.0 <4.0.0"
 
 # Dependencias previstas (se fijarán versiones al inicializar el proyecto).
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:       # Localización (es-ES) para Material/Cupertino
+    sdk: flutter
   flutter_riverpod: ^2.5.0     # Gestión de estado (MVVM)
   go_router: ^14.0.0           # Navegación / rutas (ver docs/08-flujo-navegacion.md)
-  drift: ^2.18.0               # ORM sobre SQLite local (offline-first)
+  drift: ^2.18.0               # ORM sobre SQLite local (offline-first) — uso futuro
   sqlite3_flutter_libs: ^0.5.0
   dio: ^5.4.0                  # Cliente HTTP para la API REST
-  freezed_annotation: ^2.4.0
-  json_annotation: ^4.9.0
+  intl: ^0.19.0                # Formateo de importes/fechas (es-ES, €)
+  freezed_annotation: ^2.4.0   # Reservado (los modelos usan fromJson manual)
+  json_annotation: ^4.9.0      # Reservado (los modelos usan fromJson manual)
 
 dev_dependencies:
   flutter_test:
