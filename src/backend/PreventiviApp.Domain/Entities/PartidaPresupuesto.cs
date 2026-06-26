@@ -25,13 +25,15 @@ public sealed class PartidaPresupuesto : AuditableEntity
         Medicion = new Medicion(Guid.NewGuid(), id);
     }
 
+    private PartidaPresupuesto() { } // EF Core
+
     public Guid CapituloPresupuestoId { get; private set; }
 
     /// <summary>Referencia opcional a la <see cref="Partida"/> del preciosario de origen.</summary>
     public Guid? PartidaOrigenId { get; private set; }
 
-    public string Codigo { get; set; }
-    public string Resumen { get; set; }
+    public string Codigo { get; set; } = string.Empty;
+    public string Resumen { get; set; } = string.Empty;
 
     /// <summary>Precio unitario del presupuesto (independiente del preciosario).</summary>
     public decimal Precio { get; set; }
@@ -39,5 +41,5 @@ public sealed class PartidaPresupuesto : AuditableEntity
     /// <summary>Si está bloqueado, no se sobrescribe al actualizar precios desde DCF.</summary>
     public bool PrecioBloqueado { get; set; }
 
-    public Medicion Medicion { get; private set; }
+    public Medicion Medicion { get; private set; } = null!;
 }

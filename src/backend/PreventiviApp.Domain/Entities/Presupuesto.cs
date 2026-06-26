@@ -26,8 +26,10 @@ public sealed class Presupuesto : AuditableEntity
         Estado = EstadoPresupuesto.Borrador;
     }
 
+    private Presupuesto() { } // EF Core
+
     public Guid ProyectoId { get; private set; }
-    public string Nombre { get; set; }
+    public string Nombre { get; set; } = string.Empty;
     public int NumeroVersion { get; private set; }
     public EstadoPresupuesto Estado { get; set; }
 
@@ -40,7 +42,7 @@ public sealed class Presupuesto : AuditableEntity
     /// <summary>Descuento comercial en importe absoluto, posterior a la baja.</summary>
     public decimal DescuentosImporte { get; set; }
 
-    public Iva Iva { get; set; }
+    public Iva Iva { get; set; } = null!;
 
     public IReadOnlyList<CapituloPresupuesto> CapitulosRaiz => _capitulosRaiz;
 

@@ -9,6 +9,9 @@ public abstract class AuditableEntity : Entity
 {
     protected AuditableEntity(Guid id) : base(id) { }
 
+    /// <summary>Constructor para el materializador de EF Core. No usar en código de dominio.</summary>
+    protected AuditableEntity() { }
+
     public DateTimeOffset CreadoEn { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset ActualizadoEn { get; set; } = DateTimeOffset.UtcNow;
 

@@ -1,0 +1,28 @@
+# Archivo de ejemplo del formato de intercambio DCF (variante texto).
+# Campos separados por ';'. Decimales con punto (InvariantCulture).
+# Las líneas que empiezan por '#' y las vacías se ignoran.
+
+PRECIOSARIO;Base de Precios de la Construccion 2026;2026.1
+
+# --- Catalogo de unidades ---
+UNIDAD;m2;Metro cuadrado
+UNIDAD;h;Hora
+
+# --- Capitulos (codigoPadre opcional en el ultimo campo) ---
+CAPITULO;01;Movimiento de tierras
+CAPITULO;01.01;Excavaciones;01
+
+# --- Recursos: tipo MO/MT/MQ/OT; codigo; descripcion; unidad; precio ---
+RECURSO;MO;MO001;Peon ordinario;h;18.50
+RECURSO;MQ;MQ001;Retroexcavadora sobre neumaticos;h;42.75
+RECURSO;MT;MT001;Hormigon HM-20;m2;76.30
+
+# --- Partidas: codigoCapitulo; codigo; resumen; unidad; precio ---
+PARTIDA;01.01;E0101;Excavacion en zanja en terreno blando;m2;12.40
+PARTIDA;01.01;E0102;Solera de hormigon en masa de 10 cm;m2;15.90
+
+# --- Descompuestos: codigoPartida; codigoRecurso; rendimiento ---
+DESCOMPUESTO;E0101;MO001;0.250
+DESCOMPUESTO;E0101;MQ001;0.150
+DESCOMPUESTO;E0102;MO001;0.300
+DESCOMPUESTO;E0102;MT001;0.105

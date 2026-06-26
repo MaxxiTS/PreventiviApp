@@ -9,6 +9,9 @@ public abstract class Entity
 {
     protected Entity(Guid id) => Id = id;
 
+    /// <summary>Constructor para el materializador de EF Core. No usar en código de dominio.</summary>
+    protected Entity() { }
+
     /// <summary>Identidad. Se asigna en el constructor; inmutable.</summary>
     public Guid Id { get; }
 

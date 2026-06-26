@@ -55,26 +55,46 @@ Validan el motor **contra los ejemplos numéricos documentados** en
   - `ApiControllerBase` (traduce `Result` → 200/404/409/400 ProblemDetails) y
     `ValidationExceptionHandler`. Wiring en `Program.cs` (Swagger, EnsureCreated en dev).
 
+### Catálogo (preciosario), importador DCF y documentos
+- **Persistencia EF Core** del catálogo completo (Preciosario, Capitulo, Partida, Descompuesto,
+  Recurso, Unidad, Precio) y del **árbol de presupuesto** (Presupuesto, CapituloPresupuesto
+  jerárquico, PartidaPresupuesto, Medicion, LineaMedicion) — incl. mapeo de colecciones por
+  backing field, one-to-one Partida↔Medición, autorreferencia de capítulos y reconstrucción
+  del árbol en el repositorio.
+- **Importador DCF** (`DcfImporter`): parser de texto por líneas, en streaming, tolerante a
+  errores, con progreso, cancelación y hash SHA256; mapea a las entidades canónicas. Formato
+  documentado y `tools/dcf-importer/ejemplo.dcf` de muestra.
+- **Generación de PDF** del presupuesto con **QuestPDF** (`GeneradorPresupuestoPdf`): capítulos,
+  tablas de partidas, subtotales y resumen económico, reutilizando el motor de cálculo.
+
 #### Endpoints
 | Método | Ruta | Descripción |
 |--------|------|-------------|
-| `POST` | `/api/clientes` | Crear cliente |
-| `GET` | `/api/clientes` | Listar clientes |
-| `POST` | `/api/proyectos` | Crear proyecto |
-| `GET` | `/api/proyectos` | Listar proyectos |
-| `GET` | `/api/proyectos/{id}` | Obtener proyecto |
+| `POST` | `/api/clientes` · `GET` `/api/clientes` | Crear / listar clientes |
+| `POST` `/api/proyectos` · `GET` `/api/proyectos` · `GET` `/api/proyectos/{id}` | Proyectos |
 | `PATCH` | `/api/proyectos/{id}/estado` | Cambiar estado (transición validada) |
-| `POST` | `/api/presupuestos/calcular` | Calcular totales de un presupuesto (sin persistir) |
+| `POST` | `/api/preciosarios/importar` | Importar preciosario DCF (multipart) |
+| `GET` | `/api/preciosarios` | Listar preciosarios |
+| `GET` | `/api/preciosarios/{id}/capitulos?padreId=` | Navegar capítulos/subcapítulos |
+| `GET` | `/api/preciosarios/capitulos/{id}/partidas` | Partidas de un capítulo |
+| `GET` | `/api/preciosarios/partidas/{id}/analisis` | Análisis de precios (descompuesto) |
+| `POST` | `/api/presupuestos` | Crear presupuesto |
+| `GET` | `/api/presupuestos?proyectoId=` | Listar presupuestos del proyecto |
+| `GET` | `/api/presupuestos/{id}` | Presupuesto con importes y totales |
+| `POST` | `/api/presupuestos/{id}/capitulos` | Añadir capítulo |
+| `POST` | `/api/presupuestos/capitulos/{id}/partidas` | Añadir partida + mediciones |
+| `GET` | `/api/presupuestos/{id}/pdf` | Generar PDF del presupuesto |
+| `POST` | `/api/presupuestos/calcular` | Calcular totales sin persistir |
 | `GET` | `/health` | Health check |
 
 Ejecutar la API: `dotnet run --project PreventiviApp.Api` (crea `preventivi.db` en dev y
 expone Swagger en `/swagger`).
 
 ## Pendiente (siguientes incrementos del MVP)
-- Persistencia completa del **árbol de presupuesto** (Presupuesto/Capítulo/Partida/Medición)
-  con EF Core (mapeo de colecciones, owned types y árbol jerárquico).
-- **Importador DCF** (ver [`../../docs/11-importador-dcf.md`](../../docs/11-importador-dcf.md)).
-- Generación de **PDF** (QuestPDF) y navegación en el **frontend Flutter**.
+- Edición/duplicado de partidas, bloqueo de precios y *Actualizar desde nuevo DCF*.
+- Versionado y comparación de presupuestos; exportación Excel/CSV.
+- **Frontend Flutter** (escritorio/web/móvil) y sincronización cloud (v1.0).
+- Migraciones EF Core formales (hoy se usa `EnsureCreated` en desarrollo).
 
 ## Estructura
 ```
