@@ -8,6 +8,7 @@ import '../../../shared/widgets/page_header.dart';
 import '../../presupuestos/data/presupuestos_repository.dart';
 import '../../presupuestos/domain/presupuesto.dart';
 import '../domain/proyecto.dart';
+import 'nuevo_presupuesto_dialog.dart';
 import 'proyectos_providers.dart';
 
 /// Detalle de un proyecto: datos básicos y lista de sus presupuestos.
@@ -34,6 +35,16 @@ class ProyectoDetalleScreen extends ConsumerWidget {
             ),
           ],
           actions: [
+            FilledButton.icon(
+              onPressed: () => mostrarDialogoNuevoPresupuesto(
+                context,
+                ref,
+                proyectoId: proyectoId,
+              ),
+              icon: const Icon(Icons.add, size: 18),
+              label: const Text('Nuevo presupuesto'),
+            ),
+            const SizedBox(width: 8),
             TextButton.icon(
               onPressed: () => context.go('/proyectos'),
               icon: const Icon(Icons.arrow_back, size: 18),
@@ -71,8 +82,8 @@ class ProyectoDetalleScreen extends ConsumerWidget {
                         for (final pr in lista)
                           Card(
                             child: ListTile(
-                              onTap: () =>
-                                  context.go('/presupuestos/${pr.id}'),
+                              onTap: () => context.go(
+                                  '/presupuestos/${pr.id}?proyectoId=$proyectoId'),
                               title: Text('${pr.nombre} · v${pr.version}'),
                               subtitle: Text(pr.estado),
                               trailing: Text(

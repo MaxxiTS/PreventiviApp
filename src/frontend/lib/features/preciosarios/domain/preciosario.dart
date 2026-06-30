@@ -98,6 +98,48 @@ class LineaDescompuesto {
       );
 }
 
+/// Resultado de importar un fichero DCF (intercambio FIEBDC) en un preciosario.
+///
+/// Mapea el DTO del backend .NET (camelCase) del endpoint
+/// `POST /api/preciosarios/importar`:
+///  - `ImportacionDto { capitulos, partidas, recursos, descompuestos,
+///      precios, errores[], advertencias[] }`
+class ImportacionResultado {
+  const ImportacionResultado({
+    required this.capitulos,
+    required this.partidas,
+    required this.recursos,
+    required this.descompuestos,
+    required this.precios,
+    required this.errores,
+    required this.advertencias,
+  });
+
+  final int capitulos;
+  final int partidas;
+  final int recursos;
+  final int descompuestos;
+  final int precios;
+  final List<String> errores;
+  final List<String> advertencias;
+
+  factory ImportacionResultado.fromJson(Map<String, dynamic> json) =>
+      ImportacionResultado(
+        capitulos: (json['capitulos'] as num?)?.toInt() ?? 0,
+        partidas: (json['partidas'] as num?)?.toInt() ?? 0,
+        recursos: (json['recursos'] as num?)?.toInt() ?? 0,
+        descompuestos: (json['descompuestos'] as num?)?.toInt() ?? 0,
+        precios: (json['precios'] as num?)?.toInt() ?? 0,
+        errores: _textos(json['errores']),
+        advertencias: _textos(json['advertencias']),
+      );
+
+  static List<String> _textos(dynamic v) =>
+      ((v as List<dynamic>?) ?? const [])
+          .map((e) => e.toString())
+          .toList(growable: false);
+}
+
 class AnalisisPrecios {
   const AnalisisPrecios({
     required this.partidaId,

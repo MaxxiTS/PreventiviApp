@@ -1,6 +1,8 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../shared/utils/errores.dart';
 import '../../../shared/utils/formato.dart';
 import '../../../shared/widgets/async_value_widget.dart';
 import '../../../shared/widgets/page_header.dart';
@@ -27,6 +29,42 @@ class _PreciosariosScreenState extends ConsumerState<PreciosariosScreen> {
 
   String? _capituloSeleccionadoId;
   String? _partidaSeleccionadaId;
+  bool _importando = false;
+
+  Future<void> _importarDcf() async {
+    final picked = await FilePicker.platform.pickFiles(
+      dialogTitle: 'Selecciona un fichero DCF (FIEBDC)',
+      withData: true,
+      type: FileType.custom,
+      allowedExtensions: const ['bc3', 'dcf', 'txt'],
+    );
+    if (picked == null || picked.files.isEmpty) return;
+    final file = picked.files.single;
+    final bytes = file.bytes;
+    if (bytes == null) {
+      if (mounted) mostrarErrorSnack(context, 'No se pudo leer el fichero.');
+      return;
+    }
+
+    setState(() => _importando = true);
+    try {
+      final resultado = await ref
+          .read(preciosariosRepositoryProvider)
+          .importar(bytes: bytes, nombreArchivo: file.name);
+      ref.invalidate(preciosariosProvider);
+      if (!mounted) return;
+      setState(() => _importando = false);
+      await showDialog<void>(
+        context: context,
+        builder: (_) => _ResultadoImportacionDialog(resultado: resultado),
+      );
+    } catch (e) {
+      if (mounted) {
+        setState(() => _importando = false);
+        mostrarErrorSnack(context, e);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +76,19 @@ class _PreciosariosScreenState extends ConsumerState<PreciosariosScreen> {
         PageHeader(
           breadcrumbs: ['Preciosarios', ..._ruta.map((c) => c.titulo)],
           subtitle: 'Catálogo de precios: capítulos, partidas y análisis.',
+          actions: [
+            FilledButton.icon(
+              onPressed: _importando ? null : _importarDcf,
+              icon: _importando
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.upload_file, size: 18),
+              label: const Text('Importar DCF'),
+            ),
+          ],
         ),
         const Divider(),
         Expanded(
@@ -310,6 +361,70 @@ class _PanelAnalisis extends ConsumerWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ResultadoImportacionDialog extends StatelessWidget {
+  const _ResultadoImportacionDialog({required this.resultado});
+
+  final ImportacionResultado resultado;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return AlertDialog(
+      title: const Text('Importación DCF completada'),
+      content: SizedBox(
+        width: 420,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _fila('Capítulos', resultado.capitulos),
+              _fila('Partidas', resultado.partidas),
+              _fila('Recursos', resultado.recursos),
+              _fila('Descompuestos', resultado.descompuestos),
+              _fila('Precios', resultado.precios),
+              if (resultado.advertencias.isNotEmpty) ...[
+                const Divider(height: 24),
+                Text('Advertencias (${resultado.advertencias.length})',
+                    style: theme.textTheme.titleSmall
+                        ?.copyWith(color: Colors.orange.shade800)),
+                const SizedBox(height: 4),
+                for (final a in resultado.advertencias)
+                  Text('• $a', style: theme.textTheme.bodySmall),
+              ],
+              if (resultado.errores.isNotEmpty) ...[
+                const Divider(height: 24),
+                Text('Errores (${resultado.errores.length})',
+                    style: theme.textTheme.titleSmall
+                        ?.copyWith(color: theme.colorScheme.error)),
+                const SizedBox(height: 4),
+                for (final e in resultado.errores)
+                  Text('• $e', style: theme.textTheme.bodySmall),
+              ],
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        FilledButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cerrar'),
+        ),
+      ],
+    );
+  }
+
+  Widget _fila(String label, int valor) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [Text(label), Text('$valor')],
       ),
     );
   }

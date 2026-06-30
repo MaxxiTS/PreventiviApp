@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/preciosarios/presentation/preciosarios_screen.dart';
+import '../../features/presupuestos/presentation/comparacion_screen.dart';
 import '../../features/presupuestos/presentation/presupuesto_screen.dart';
 import '../../features/proyectos/presentation/proyecto_detalle_screen.dart';
 import '../../features/proyectos/presentation/proyectos_screen.dart';
@@ -16,6 +17,7 @@ import 'app_shell.dart';
 ///   '/proyectos'           -> Lista de proyectos
 ///   '/proyectos/:id'       -> Detalle de proyecto (+ presupuestos)
 ///   '/preciosarios'        -> Catálogo de precios (capítulos → partidas)
+///   '/presupuestos/comparar?a=&b=' -> Comparación de dos presupuestos
 ///   '/presupuestos/:id'    -> Detalle de presupuesto (resumen + árbol)
 ///
 /// Todas las rutas viven dentro de un [ShellRoute] con el [AppShell]
@@ -48,9 +50,17 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const PreciosariosScreen(),
           ),
           GoRoute(
+            path: '/presupuestos/comparar',
+            builder: (context, state) => ComparacionScreen(
+              aId: state.uri.queryParameters['a']!,
+              bId: state.uri.queryParameters['b']!,
+            ),
+          ),
+          GoRoute(
             path: '/presupuestos/:id',
             builder: (context, state) => PresupuestoScreen(
               presupuestoId: state.pathParameters['id']!,
+              proyectoId: state.uri.queryParameters['proyectoId'],
             ),
           ),
         ],

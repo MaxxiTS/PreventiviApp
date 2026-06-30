@@ -52,6 +52,23 @@ class PreciosariosRepository {
     );
     return AnalisisPrecios.fromJson(res.data!);
   }
+
+  /// Importa un fichero DCF (FIEBDC) mediante multipart/form-data.
+  ///
+  /// El campo del formulario es `archivo`. Devuelve el resumen de importación.
+  Future<ImportacionResultado> importar({
+    required List<int> bytes,
+    required String nombreArchivo,
+  }) async {
+    final form = FormData.fromMap({
+      'archivo': MultipartFile.fromBytes(bytes, filename: nombreArchivo),
+    });
+    final res = await _dio.post<Map<String, dynamic>>(
+      '/api/preciosarios/importar',
+      data: form,
+    );
+    return ImportacionResultado.fromJson(res.data!);
+  }
 }
 
 /// Provider del repositorio de preciosarios.
