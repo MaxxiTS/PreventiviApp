@@ -87,15 +87,20 @@ Detalle completo en [`docs/04-estructura-carpetas.md`](docs/04-estructura-carpet
 
 ---
 
-## 🚀 Cómo empezar (cuando exista código)
+## 🚀 Cómo empezar
+
+Guía completa paso a paso en **[`QUICKSTART.md`](QUICKSTART.md)**. Resumen:
 
 ```bash
-# Backend
+# Backend (.NET 9): API en http://localhost:5000, Swagger en /swagger.
+# En el primer arranque crea SQLite y siembra datos de ejemplo.
 cd src/backend && dotnet restore && dotnet run --project PreventiviApp.Api
 
-# Frontend
-cd src/frontend && flutter pub get && flutter run
+# Frontend (Flutter): apunta por defecto a http://localhost:5000
+cd src/frontend && flutter pub get && flutter run -d chrome
 ```
+
+O con los atajos: `./scripts/run-backend.sh` y `./scripts/run-frontend.sh`.
 
 ## 🤝 Contribución
 

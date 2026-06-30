@@ -161,7 +161,12 @@ Leyenda: `[x]` completado · `[~]` parcial / en curso · `[ ]` pendiente
 - [ ] Búsqueda en lenguaje natural y sugerencia de partidas
 - [ ] Detección de duplicados, estimación de costes, explicación de partidas
 
-## 9. DevOps / despliegue
+## 9. DevOps / arranque local / despliegue
+- [x] Guía de arranque local (`QUICKSTART.md`) + scripts (`run-backend.sh`, `run-frontend.sh`)
+- [x] Solución `.sln` real (build/test sobre toda la solución)
+- [x] `launchSettings.json` (API en http://localhost:5000) y **CORS** en desarrollo
+- [x] Datos de ejemplo (`DevDataSeeder`): cliente, proyecto, preciosario y presupuesto demo
+- [x] `health` endpoint
 - [~] CI básico de GitHub Actions (esqueleto creado; pendiente activarlo con código compilable)
 - [ ] Pipelines de build/test/release por plataforma
 - [ ] Contenedor Docker del backend + PostgreSQL gestionada
